@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ShowSurfer.Controls.MovieDetails"
+             xmlns:controls="clr-namespace:ShowSurfer.Controls"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Name="this">
+    
+    <Border BindingContext="{x:Reference this}"
+            StrokeShape="RoundRectangle 10,10,0,0"
+            Background="#2b2b2b"
+            StrokeThickness="0">
+        <VerticalStackLayout>
+            <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="0" HeightRequest="500" Margin="10">
+                <Border Grid.Column="0"
+                        Grid.RowSpan="3"
+                        HeightRequest="150"
+                        WidthRequest="120"
+                        StrokeShape="RoundRectangle 10"
+                        Stroke="{AppThemeBinding Light={StaticResource White}, Dark=#121212}"
+                        VerticalOptions="Start"
+                        HorizontalOptions="Start"
+                        Margin="0,0,10,0">
+                    <Image Aspect="AspectFill"
+                           HeightRequest="150"
+                           WidthRequest="120">
+                        <Image.Source>
+                            <UriImageSource Uri="{Binding Programme.PosterIcon}"/>
+                        </Image.Source>
+                    </Image>
+                </Border>
+                <Grid Grid.Row="0"
+                  Grid.Column="1"
+                  ColumnDefinitions="*, Auto">
+                    <!--Displays the title of the movie or tv show-->
+                    <Label Grid.Column="0"
+                           Text="{Binding Programme.DisplayTitle}"
+                           FontSize="17"
+                           TextColor="{AppThemeBinding Light=#121212, Dark=#White}"
+                           LineBreakMode="CharacterWrap"/>
+                    <!--Close Button-->
+                    <Button Grid.Column="1"
+                            Text="X"
+                            FontSize="17"
+                            BackgroundColor="#525252"
+                            TextColor="{AppThemeBinding Light=#121212, Dark=#White}"
+                            VerticalOptions="Start"
+                            HeightRequest="25"
+                            WidthRequest="25"
+                            CornerRadius="25"
+                            Padding="0"
+                            Margin="5"/>
+                </Grid>
+                <!--Displays the Release Date of the Programme-->
+                <Label Grid.Row="1"
+                       Grid.Column="1"
+                       Text="{Binding Programme.ReleaseDate}"
+                       FontSize="10"
+                       TextColor="{AppThemeBinding Light=#121212, Dark=#White}"/>
+                <!--Displays the Synopsis of the Programme-->
+                <Label Grid.Row="2"
+                       Grid.Column="1"
+                       Text="{Binding Programme.Overview}"
+                       FontSize="11"
+                       MaxLines="4"
+                       TextColor="{AppThemeBinding Light=#121212, Dark=#White}"/>
+            </Grid>
+            <BoxView HeightRequest="2"
+                     BackgroundColor="White"
+                     Color="#9d9d9d"
+                     CornerRadius="10"/>
+            <Grid ColumnDefinitions="Auto, *, Auto" Padding="15" ColumnSpacing="5">
+
+                <Grid Grid.Column="0" HorizontalOptions="Center" VerticalOptions="Center">
+                    <Ellipse Stroke="White"
+                                HeightRequest="22"
+                                WidthRequest="22"
+                                StrokeThickness="2"/>
+                </Grid>
+                <Label Grid.Column="1"
+                       Text="More Details"
+                       TextColor="{AppThemeBinding Light=#121212, Dark=#White}"
+                       VerticalOptions="Center"
+                       Margin="15,0,15,0"/>
+
+                <Label Grid.Column="2"
+                       Text=">"
+                       TextColor="{AppThemeBinding Light=#121212, Dark=#White}"
+                       FontSize="20"
+                       VerticalOptions="Center"
+                       Margin="15,0,15,0"/>
+            </Grid>
+        </VerticalStackLayout>
+    </Border>
+</ContentView>

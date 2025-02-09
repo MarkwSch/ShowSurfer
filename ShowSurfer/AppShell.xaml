@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="ShowSurfer.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="clr-namespace:ShowSurfer.Pages"
+    Shell.BackgroundColor="#501212"
+    Shell.TabBarBackgroundColor="#501212"
+    Shell.TabBarTitleColor="White"
+    Shell.TabBarUnselectedColor="#FF5757"
+    Shell.FlyoutBehavior="Disabled">
+
+    <!--Shell Title View to display ShowSurfer and logo at the top-->
+    <Shell.TitleView>
+        <HorizontalStackLayout VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="250">
+            <Label Text="ShowSurfer"
+                   FontFamily="TitilliumWeb-Black"
+                   TextColor="White"
+                   HorizontalOptions="Center"
+                   FontSize="30"/>
+            <Image Source="logo_white_bold.png"
+                   HorizontalOptions="End"
+                   HeightRequest="40"
+                   WidthRequest="40"
+                   Margin="20,0,0,0"/>
+        </HorizontalStackLayout>
+    </Shell.TitleView>
+    <!--Shell TabBar to navigate between the search and the genre pages-->
+    <TabBar>
+        <ShellContent
+            Title="Home"
+            Icon="search.png"
+            ContentTemplate="{DataTemplate pages:MainPage}"
+            Route="MainPage"/>
+        <ShellContent
+            Title="Genre"
+            Icon="genre3.png"
+            ContentTemplate="{DataTemplate pages:GenreCategoriesPage}"
+            Route="GenreCategoriesPage"/>
+    </TabBar>
+    <!--Shell route to navigate to the Details Page-->
+    <ShellContent Route="movieDetailsPage" ContentTemplate="{DataTemplate pages:MovieDetailsPage}" />
+</Shell>

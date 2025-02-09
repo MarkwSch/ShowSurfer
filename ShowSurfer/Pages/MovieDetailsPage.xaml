@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ShowSurfer.ViewModels"
+             xmlns:services="clr-namespace:ShowSurfer.Services"
+             x:Class="ShowSurfer.Pages.MovieDetailsPage"
+             x:DataType="vm:MovieDetailsViewModel"
+             xmlns:models="clr-namespace:ShowSurfer.Models"
+             xmlns:controls="clr-namespace:ShowSurfer.Controls"
+             Background="{AppThemeBinding Light={StaticResource White}, Dark=#121212}"
+             Title="MovieDetailsPage">
+
+    <!--Specific Style Guide for elements on this page-->
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <!--Style for the header with the backdrop, poster and movie details-->
+            <Style TargetType="Grid" x:Key="MovieDetailsPosterGrid">
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup>
+                            <VisualState x:Name="Portrait">
+                                <VisualState.StateTriggers>
+                                    <OrientationStateTrigger Orientation="Portrait" />
+                                </VisualState.StateTriggers>
+                                <!--Portrait Specifications-->
+                                <VisualState.Setters>
+                                    <Setter Property="RowDefinitions" Value="Auto,*"/>
+                                    <Setter Property="HeightRequest" Value="390"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Landscape">
+                                <VisualState.StateTriggers>
+                                    <OrientationStateTrigger Orientation="Landscape" />
+                                </VisualState.StateTriggers>
+                                <!--Lanscape Specifications-->
+                                <VisualState.Setters>
+                                    <Setter Property="RowDefinitions" Value="Auto,*"/>
+                                    <Setter Property="HeightRequest" Value="280"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+
+            <!--The Movie Backdrop Image Properties-->
+            <Style TargetType="Image" x:Key="MovieBackdropImage">
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup>
+                            <VisualState x:Name="Portrait">
+                                <VisualState.StateTriggers>
+                                    <OrientationStateTrigger Orientation="Portrait" />
+                                </VisualState.StateTriggers>
+                                <!--Portrait size of the Movie Backdrop-->
+                                <VisualState.Setters>
+                                    <Setter Property="Aspect" Value="AspectFill"/>
+                                    <Setter Property="WidthRequest" Value="400"/>
+                                    <Setter Property="HorizontalOptions" Value="Center"/>
+                                    <Setter Property="VerticalOptions" Value="Center"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Landscape">
+                                <VisualState.StateTriggers>
+                                    <OrientationStateTrigger Orientation="Landscape" />
+                                </VisualState.StateTriggers>
+                                <!--Landscape size of the Movie Backdrop-->
+                                <VisualState.Setters>
+                                    <Setter Property="Aspect" Value="AspectFill"/>
+                                    <Setter Property="WidthRequest" Value="850"/>
+                                    <Setter Property="HorizontalOptions" Value="Center"/>
+                                    <Setter Property="VerticalOptions" Value="Start"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+
+            <!--Movie Backdrop Box-->
+            <Style TargetType="Grid" x:Key="MovieDetailsPoster">
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup>
+                            <VisualState x:Name="Portrait">
+                                <VisualState.StateTriggers>
+                                    <OrientationStateTrigger Orientation="Portrait" />
+                                </VisualState.StateTriggers>
+                                <!--Portrait size of the Movie Backdrop Box-->
+                                <VisualState.Setters>
+                                    <Setter Property="Grid.Row" Value="0"/>
+                                    <Setter Property="HeightRequest" Value="220"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Landscape">
+                                <VisualState.StateTriggers>
+                                    <OrientationStateTrigger Orientation="Landscape" />
+                                </VisualState.StateTriggers>
+                                <!--Landscape size of the Movie Backdrop Box-->
+                                <VisualState.Setters>
+                                    <Setter Property="Grid.Row" Value="0"/>
+                                    <Setter Property="Grid.RowSpan" Value="2"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+
+            <!--Fade Box-->
+            <Style TargetType="Grid" x:Key="FadeBox">
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup>
+                            <VisualState x:Name="Portrait">
+                                <VisualState.StateTriggers>
+                                    <OrientationStateTrigger Orientation="Portrait" />
+                                </VisualState.StateTriggers>
+                                <!--Portrait Specifications-->
+                                <VisualState.Setters>
+                                    <Setter Property="VerticalOptions" Value="End"/>
+                                    <Setter Property="HeightRequest" Value="100"/>
+                                    <Setter Property="IsVisible" Value="True"/>
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                <GradientStop Offset="0.5" Color="Transparent" />
+                                                <GradientStop Offset="1" Color="{AppThemeBinding Light={StaticResource White}, Dark=#121212}" />
+                                            </LinearGradientBrush>
+                                        </Setter.Value>
+                                    </Setter>
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Landscape">
+                                <VisualState.StateTriggers>
+                                    <OrientationStateTrigger Orientation="Landscape" />
+                                </VisualState.StateTriggers>
+                                <!--Landscape Specifications-->
+                                <VisualState.Setters>
+                                    <Setter Property="WidthRequest" Value="400"/>
+                                    <Setter Property="HeightRequest" Value="170"/>
+                                    <Setter Property="ColumnDefinitions" Value="2"/>
+                                    <Setter Property="Grid.Row" Value="1"/>
+                                    <Setter Property="ColumnDefinitions" Value="Auto,*"/>
+                                    <Setter Property="Margin" Value="0,2,0,0"/>
+                                    <Setter Property="HorizontalOptions" Value="Start"/>
+                                    <Setter Property="VerticalOptions" Value="End"/>
+                                    <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark=#121212}"/>
+                                    <Setter Property="IsVisible" Value="False"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+            
+            <!--Movie Details Box-->
+            <Style TargetType="Grid" x:Key="MovieDetailsBox">
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup>
+                            <VisualState x:Name="Portrait">
+                                <VisualState.StateTriggers>
+                                    <OrientationStateTrigger Orientation="Portrait" />
+                                </VisualState.StateTriggers>
+                                <!--Portrait Specifications-->
+                                <VisualState.Setters>
+                                    <Setter Property="Grid.Row" Value="1"/>
+                                    <Setter Property="ColumnDefinitions" Value="2"/>
+                                    <Setter Property="ColumnDefinitions" Value="Auto,*"/>
+                                    <Setter Property="HeightRequest" Value="150"/>
+                                    <Setter Property="WidthRequest" Value="390"/>
+                                    <Setter Property="Margin" Value="10,2,10,10"/>
+                                    <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark=#121212}"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Landscape">
+                                <VisualState.StateTriggers>
+                                    <OrientationStateTrigger Orientation="Landscape" />
+                                </VisualState.StateTriggers>
+                                <!--Landscape Specifications-->
+                                <VisualState.Setters>
+                                    <Setter Property="WidthRequest" Value="400"/>
+                                    <Setter Property="HeightRequest" Value="170"/>
+                                    <Setter Property="ColumnDefinitions" Value="2"/>
+                                    <Setter Property="Grid.Row" Value="1"/>
+                                    <Setter Property="ColumnDefinitions" Value="Auto,*"/>
+                                    <Setter Property="Margin" Value="0,2,0,0"/>
+                                    <Setter Property="HorizontalOptions" Value="Start"/>
+                                    <Setter Property="VerticalOptions" Value="End"/>
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                <GradientStop Offset="0" Color="Transparent" />
+                                                <GradientStop Offset="0.95" Color="{AppThemeBinding Light={StaticResource White}, Dark=#121212}" />
+                                            </LinearGradientBrush>
+                                        </Setter.Value>
+                                    </Setter>
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+                    
+            <!-- Red line splitter between the two boxes -->
+            <Style TargetType="BoxView" x:Key="RedMenuSplitter">
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup>
+                            <VisualState x:Name="Portrait">
+                                <VisualState.StateTriggers>
+                                    <OrientationStateTrigger Orientation="Portrait" />
+                                </VisualState.StateTriggers>
+                                <!--Size of the Movie Backdrop-->
+                                <VisualState.Setters>
+                                    <Setter Property="HeightRequest" Value="2"/>
+                                    <Setter Property="Color" Value="#501212"/>
+                                    <Setter Property="CornerRadius" Value="10"/>
+                                    <Setter Property="HorizontalOptions" Value="Center"/>
+                                    <Setter Property="Margin" Value="10,5,10,10"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Landscape">
+                                <VisualState.StateTriggers>
+                                    <OrientationStateTrigger Orientation="Landscape" />
+                                </VisualState.StateTriggers>
+                                <!--Size of the Movie Backdrop-->
+                                <VisualState.Setters>
+                                    <Setter Property="HeightRequest" Value="2"/>
+                                    <Setter Property="Color" Value="#501212"/>
+                                    <Setter Property="CornerRadius" Value="10"/>
+                                    <Setter Property="HorizontalOptions" Value="Start"/>
+                                    <Setter Property="Margin" Value="10,5,10,10"/>
+                                    <Setter Property="WidthRequest" Value="380"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Border Background="{AppThemeBinding Light={StaticResource White}, Dark=#121212}"
+        StrokeThickness="0">
+        <ScrollView>
+            <VerticalStackLayout>
+                <!-- Movie Backdrop Image -->
+                <Grid Style="{StaticResource MovieDetailsPosterGrid}">
+                        <Grid Style="{StaticResource MovieDetailsPoster}">
+                            <Image Style="{StaticResource MovieBackdropImage}">
+                                <Image.Source>
+                                    <UriImageSource Uri="{Binding FirstMovieBackDrop}"/>
+                                </Image.Source>
+                            </Image>
+                        </Grid>
+                        <!--Adds a fade effect over the bottom of the MovieBackdrop-->
+                    <Grid Style="{StaticResource FadeBox}"/>
+
+                    <Grid Style="{StaticResource MovieDetailsBox}">
+                        <Border Grid.Column="0"
+                                HeightRequest="150"
+                                WidthRequest="120"
+                                StrokeShape="RoundRectangle 10"
+                                Stroke="{AppThemeBinding Light={StaticResource White}, Dark=#121212}"
+                                VerticalOptions="Center"
+                                HorizontalOptions="Start"
+                                Margin="10,0,0,0">
+                            <Image Aspect="AspectFill"
+                                   HeightRequest="150"
+                                   WidthRequest="120"
+                                   VerticalOptions="Center">
+                                <Image.Source>
+                                    <UriImageSource Uri="{Binding SelectedProgramme.PosterIcon}"/>
+                                </Image.Source>
+                            </Image>
+                        </Border>
+                        <!--Scrollview for the Movie Details and Movie Title Box-->
+                        <ScrollView x:Name="MovieDetailsScrollView" Grid.Column="1" Orientation="Vertical" HeightRequest="150">
+                            <VerticalStackLayout Spacing="5" WidthRequest="250" Margin="10,0,0,0" VerticalOptions="Center">
+                            <!--Displays the title of the movie or tv show-->
+                            <Label Text="{Binding SelectedProgramme.DisplayTitle}"
+                                   Style="{StaticResource MovieTitleStyle}"/>
+                                
+                            <!--Displays the score and votes for the Programme-->
+                            <HorizontalStackLayout>
+                                    <Label Text="Score: "
+                                       Style="{StaticResource DetailsSubheadingStyle}"
+                                       VerticalOptions="Center"/>
+                                <Label Text="{Binding Vote_string}"
+                                       Style="{StaticResource DetailsBodyStyle}"
+                                       VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+
+                            <!--Displays the Release Date of the Programme-->
+                            <HorizontalStackLayout>
+                                    <Label Text="Release Date: "
+                                       Style="{StaticResource DetailsSubheadingStyle}"
+                                       VerticalOptions="Center"/>
+                                <Label Text="{Binding SelectedProgramme.ReleaseDate}"
+                                       Style="{StaticResource DetailsBodyStyle}"
+                                       VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+
+
+                            <!--Displays the Runtime of the Programme-->
+                            <HorizontalStackLayout>
+                                <Label Text="Runtime: "
+                                       Style="{StaticResource DetailsSubheadingStyle}"
+                                       VerticalOptions="Center"/>
+                                <Label Text="{Binding Runtime, StringFormat='{0} mins'}"
+                                       Style="{StaticResource DetailsBodyStyle}"
+                                       VerticalOptions="Center"
+                                       MaxLines="2"
+                                       LineBreakMode="CharacterWrap"/>
+                            </HorizontalStackLayout>
+
+                            <!--Displays the Genre of the Programme-->
+                            <HorizontalStackLayout>
+                                <Label Text="Genre: "
+                                       Style="{StaticResource DetailsSubheadingStyle}"
+                                       VerticalOptions="Center"/>
+                                <Label Text="{Binding GenresConcatenate}"
+                                       Style="{StaticResource DetailsBodyStyle}"
+                                       VerticalOptions="Center"
+                                       MaxLines="2"/>
+                            </HorizontalStackLayout>
+
+                            <!--Displays the Production Companies of the Programme-->
+                            <HorizontalStackLayout>
+                                <Label MaxLines="2" LineBreakMode="CharacterWrap" WidthRequest="250">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="Production Companies: "
+                                              Style="{StaticResource DetailsSubheadingStyle}" />
+                                            <Span Text="{Binding ProductionCompaniesConcatenate}"
+                                              Style="{StaticResource DetailsBodyStyle}"/>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </ScrollView>
+                </Grid>
+                </Grid>
+                <!--Red Menu Splitter-->
+                <BoxView Style="{StaticResource RedMenuSplitter}"/>
+            <VerticalStackLayout Margin="10,0,0,10" Spacing="10">
+                    <!--Overview-->
+                    <Label Text="Overview"
+                           Style="{StaticResource SubheadingStyle}"/>
+                    <!--Displays the overview of the Programme-->
+                    <Label Text="{Binding SelectedProgramme.Overview}"
+                       Style="{StaticResource BodyStyle}"/>
+
+                    <!--Crew List-->
+                    <Label Text="Directors and Producers"
+                               Style="{StaticResource SubheadingStyle}"/>
+                    <ScrollView x:Name="CrewScrollView" Orientation="Horizontal">
+                        <StackLayout Orientation="Horizontal">
+                            <CollectionView ItemsSource="{Binding CrewCollection}">
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Horizontal"
+                                                       SnapPointsType="MandatorySingle" 
+                                                       SnapPointsAlignment="Start"/>
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate x:DataType="services:Crew" xmlns:services="clr-namespace:ShowSurfer.Services">
+                                        <StackLayout WidthRequest="70" VerticalOptions="Center" Margin="0,0,10,0">
+                                            <Border StrokeShape="RoundRectangle 10"
+                                                        Stroke="{AppThemeBinding Light={StaticResource White}, Dark=#121212}"
+                                                        StrokeThickness="1">
+                                                <Image Aspect="AspectFill" WidthRequest="70" HeightRequest="70">
+                                                    <Image.Source>
+                                                        <UriImageSource Uri="{Binding profile_icon}"/>
+                                                    </Image.Source>
+                                                </Image>
+                                            </Border>
+                                            <Label Text="{Binding crew_job}"
+                                                       TextColor="{AppThemeBinding Light=#121212, Dark={StaticResource White}}"
+                                                       LineBreakMode="WordWrap"
+                                                       FontSize="10"
+                                                       HorizontalTextAlignment="Center"
+                                                       VerticalOptions="Center"
+                                                       VerticalTextAlignment="Center"
+                                                       HorizontalOptions="Center"/>
+                                        </StackLayout>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </StackLayout>
+                    </ScrollView>
+                    <!--Actors List-->
+                    <Label Text="Cast List" 
+                           Style="{StaticResource SubheadingStyle}"/>
+                    <ScrollView x:Name="ActorsScrollView" Orientation="Horizontal">
+                        <StackLayout Orientation="Horizontal" >
+                            <CollectionView ItemsSource="{Binding ActorsCollection}">
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Horizontal"
+                                                       SnapPointsType="MandatorySingle" 
+                                                       SnapPointsAlignment="Start" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate x:DataType="services:Cast" xmlns:services="clr-namespace:ShowSurfer.Services">
+                                        <StackLayout WidthRequest="70" VerticalOptions="Center" Margin="0,0,10,0">
+                                            <Border StrokeShape="RoundRectangle 10"
+                                                Stroke="{AppThemeBinding Light={StaticResource White}, Dark=#121212}"
+                                                StrokeThickness="1">
+                                                <Image Aspect="AspectFill" WidthRequest="70" HeightRequest="70">
+                                                    <Image.Source>
+                                                        <UriImageSource Uri="{Binding profile_icon}"/>
+                                                    </Image.Source>
+                                                </Image>
+                                            </Border>
+                                            <Label Text="{Binding cast_character}"
+                                               TextColor="{AppThemeBinding Light=#121212, Dark={StaticResource White}}"
+                                               LineBreakMode="WordWrap"
+                                               FontSize="10"
+                                               HorizontalTextAlignment="Center"
+                                               VerticalOptions="Center"
+                                               VerticalTextAlignment="Center"
+                                               HorizontalOptions="Center"/>
+                                        </StackLayout>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </StackLayout>
+                    </ScrollView>
+                    <!--Streaming Availability-->
+                    <Label Text="Streaming Availability"
+                           Style="{StaticResource SubheadingStyle}"
+                           Margin="0,10,0,0"/>
+                    <BoxView HeightRequest="2"
+                             Color="#501212"
+                             CornerRadius="10"
+                             Margin="0,0,10,0"/>
+                </VerticalStackLayout>
+
+
+            <!--Display the Watch Providers-->
+            <!--Displays the Picker Combobox for the Country Selection-->
+                <Grid ColumnDefinitions="Auto, *" HorizontalOptions="Center">
+                    <Border StrokeThickness="1"
+                            StrokeShape="RoundRectangle 10,10,10,10"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark=#292929}"
+                            HeightRequest="40"
+                            HorizontalOptions="Center"
+                            Margin="0,5,0,0">
+                        <Picker ItemsSource="{Binding UniqueCountryCodes}" 
+                                SelectedItem="{Binding SelectedCountryCode}"
+                                TextColor="{AppThemeBinding Light=#121212, Dark={DynamicResource White}}"
+                                FontFamily="Prompt-Bold"
+                                WidthRequest="370"
+                                BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark=#292929}"
+                                HeightRequest="40"
+                                HorizontalOptions="Center" 
+                                HorizontalTextAlignment="Center"
+                                FontSize="16"/>
+                    </Border>
+            </Grid>
+
+            <!-- Display Flatrate details -->
+                <Label Text="No Streaming Options" 
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light=#121212, Dark={StaticResource White}}"
+                       HorizontalOptions="Center"
+                       Margin="10"
+                       IsVisible="{Binding NoStreamingVisibility}"/>
+                <!--Horizontal scrollview so if there are a few providers the user can scroll through them-->
+                <ScrollView x:Name="FlatrateScrollView" Orientation="Horizontal" Margin="10,15,0,0">
+                    <StackLayout Orientation="Horizontal" >
+                        <CollectionView ItemsSource="{Binding FilteredFlatrateCollection}">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Horizontal"
+                                                   SnapPointsType="MandatorySingle" 
+                                                   SnapPointsAlignment="Start"/>
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="services:FlatRate" xmlns:services="clr-namespace:ShowSurfer.Services">
+                                    <StackLayout WidthRequest="70" VerticalOptions="Center" Margin="0,0,10,10">
+                                        <Border StrokeShape="RoundRectangle 10"
+                                                Stroke="{AppThemeBinding Light={StaticResource White}, Dark=#121212}"
+                                                StrokeThickness="1">
+                                            <Image Aspect="AspectFill" WidthRequest="70" HeightRequest="70">
+                                                <Image.Source>
+                                                    <UriImageSource Uri="{Binding logo_icon}"/>
+                                                </Image.Source>
+                                            </Image>
+                                        </Border>
+                                        <Label Text="{Binding provider_name}"
+                                               TextColor="{AppThemeBinding Light=#121212, Dark={StaticResource White}}"
+                                               LineBreakMode="WordWrap"
+                                               FontSize="12"
+                                               HorizontalTextAlignment="Center"
+                                               VerticalOptions="Center"
+                                               VerticalTextAlignment="Center"
+                                               HorizontalOptions="Center"/>
+                                    </StackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </StackLayout>
+                </ScrollView>
+            </VerticalStackLayout>
+    </ScrollView>
+    </Border>
+</ContentPage>

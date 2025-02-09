@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ShowSurfer.Controls.GenreControl"
+             xmlns:models="clr-namespace:ShowSurfer.Models"
+             xmlns:controls="clr-namespace:ShowSurfer.Controls"
+             xmlns:vm="clr-namespace:ShowSurfer.ViewModels"
+             x:Name="this">
+<!--Resource dictionary that provides styles for the button and collection view-->    
+    <ContentView.Resources>
+        <ResourceDictionary>
+            
+            <!--Button style-->
+            <Style x:Key="ButtonStyle" TargetType="Button">
+                <Setter Property="FontFamily" Value="Poppins"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="TextColor" Value="White"/>
+                <Setter Property="BackgroundColor" Value="#A43A3A"/>
+                <Setter Property="LineBreakMode" Value="WordWrap"/>
+                <Setter Property="WidthRequest" Value="130"/>
+                <Setter Property="HeightRequest" Value="80"/>
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <LinearGradientBrush StartPoint="1,0" EndPoint="0,0" >
+                            <GradientStop Color="#7D2D2D" Offset="0.1"/>
+                            <GradientStop Color="#A43A3A" Offset="0.5"/>
+                            <GradientStop Color="#7D2D2D" Offset="0.9"/>
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            
+            <!--CollectionView style-->
+            <Style TargetType="CollectionView" x:Key="GenreColumnsStyle">
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup>
+                            <VisualState x:Name="Portrait">
+                                <VisualState.StateTriggers>
+                                    <OrientationStateTrigger Orientation="Portrait" />
+                                </VisualState.StateTriggers>
+                                <VisualState.Setters>
+                                    <Setter Property="BindingContext" Value="{x:Reference this}"/>
+                                    <Setter Property="ItemsSource" Value="{Binding GenreButtonGrid}"/>
+                                    <Setter Property="HorizontalOptions" Value="Center"/>
+                                    <Setter Property="Margin" Value="0,0,0,30"/>
+                                    <Setter Property="ItemsLayout">
+                                        <Setter.Value>
+                                            <GridItemsLayout Span="2"
+                                            Orientation="Vertical"
+                                            HorizontalItemSpacing="0"
+                                            VerticalItemSpacing="30"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Landscape">
+                                <VisualState.StateTriggers>
+                                    <OrientationStateTrigger Orientation="Landscape" />
+                                </VisualState.StateTriggers>
+                                <VisualState.Setters>
+                                    <Setter Property="BindingContext" Value="{x:Reference this}"/>
+                                    <Setter Property="ItemsSource" Value="{Binding GenreButtonGrid}"/>
+                                    <Setter Property="HorizontalOptions" Value="Center"/>
+                                    <Setter Property="Margin" Value="0,0,0,30"/>
+                                    <Setter Property="ItemsLayout">
+                                        <Setter.Value>
+                                            <GridItemsLayout Span="4"
+                                            Orientation="Vertical"
+                                            HorizontalItemSpacing="20"
+                                            VerticalItemSpacing="30"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </ContentView.Resources>
+    
+    
+    <ScrollView VerticalOptions="FillAndExpand">
+        <VerticalStackLayout VerticalOptions="FillAndExpand">
+            <Label Text="Search by Genre"
+                   TextColor="{AppThemeBinding Light=#121212, Dark={DynamicResource White}}"
+                   HorizontalOptions="Center"
+                   Margin="0,0,0,20"
+                   FontFamily="Poppins"
+                   FontAttributes="Bold"
+                   FontSize="Title"/>
+            <!--Creates buttons for the strings defined in the .cs-->
+            <CollectionView Style="{StaticResource GenreColumnsStyle}" HorizontalOptions="Center">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid HorizontalOptions="Center">
+                            <Button Text="{Binding}" Style="{StaticResource ButtonStyle}" Clicked="GenreButton_Clicked"/>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentView>

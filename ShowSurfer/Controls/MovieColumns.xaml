@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:ShowSurfer.Models"
+             xmlns:controls="clr-namespace:ShowSurfer.Controls"
+             xmlns:vm="clr-namespace:ShowSurfer.ViewModels"
+             x:Class="ShowSurfer.Controls.MovieColumns"
+             BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark=#121212}"
+             x:Name="this">
+    
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <Style TargetType="CollectionView" x:Key="MovieColumnsStyle">
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup>
+                            <VisualState x:Name="Portrait">
+                                <VisualState.StateTriggers>
+                                    <OrientationStateTrigger Orientation="Portrait" />
+                                </VisualState.StateTriggers>
+                                <VisualState.Setters>
+                                    <Setter Property="ItemsLayout">
+                                        <Setter.Value>
+                                            <GridItemsLayout Span="2"
+                                                         Orientation="Vertical"
+                                                         HorizontalItemSpacing="20"
+                                                         VerticalItemSpacing="20"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Landscape">
+                                <VisualState.StateTriggers>
+                                    <OrientationStateTrigger Orientation="Landscape" />
+                                </VisualState.StateTriggers>
+                                <VisualState.Setters>
+                                    <Setter Property="ItemsLayout">
+                                        <Setter.Value>
+                                            <GridItemsLayout Span="4"
+                                                             Orientation="Vertical"
+                                                             HorizontalItemSpacing="40"
+                                                             VerticalItemSpacing="30"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+            <!-- ... -->
+        </ResourceDictionary>
+    </ContentView.Resources>
+
+
+    <VerticalStackLayout BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark=#121212}"
+                         BindingContext="{x:Reference this}">
+        <Label Text="{Binding Heading}"
+               Style="{StaticResource SubheadingStyle}"
+               FontAttributes="Bold"
+               FontSize="18"
+               HorizontalTextAlignment="Start"
+               Margin="10, 0, 0, 15"
+               TextColor="{AppThemeBinding Light=#121212, Dark={StaticResource White}}"
+               HorizontalOptions="Center"
+               />
+        <CollectionView ItemsSource="{Binding Programme}"
+                        Style="{StaticResource MovieColumnsStyle}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:Programme">
+                    <Border StrokeShape="RoundRectangle 10"
+                            Stroke="#121212"
+                            StrokeThickness="1"
+                            BackgroundColor="#121212">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout BackgroundColor="#6D1717"
+                                             MinimumHeightRequest="270"
+                                             WidthRequest="150"
+                                             HorizontalOptions="Fill">
+                            <Grid>
+                                <Image Aspect="AspectFill">
+                                    <Image.Source>
+                                        <UriImageSource Uri="{Binding PosterIcon}" />
+                                    </Image.Source>
+                                </Image>
+                                
+                                <Grid VerticalOptions="Start" BackgroundColor="Grey" Opacity="0.7" WidthRequest="125">
+                                    
+                                </Grid>
+                                
+                            </Grid>
+                            <!--Display Box Diplaying Movie Title and Release Date-->
+                            <Grid RowDefinitions="*, Auto">
+                                <!--Release Date-->
+                                <StackLayout Grid.Row="0" BackgroundColor="#535353">
+                                    <Label Text="{Binding ReleaseDate, StringFormat='{}{0:yyyy}'}"
+                                           Style="{StaticResource DetailsBodyStyle}"
+                                           FontSize="11"
+                                           TextColor="White"
+                                           HorizontalTextAlignment="Center"
+                                           VerticalTextAlignment="Center"
+                                           Margin="0,2,0,2"/>
+                                </StackLayout>
+                                <!--Movie Title-->
+                                <StackLayout Grid.Row="1" BackgroundColor="#6D1717">
+                                    <Label Text="{Binding DisplayTitle}"
+                                           Style="{StaticResource DetailsSubheadingStyle}"
+                                           FontSize="12"
+                                           LineHeight="1"
+                                           TextColor="White"
+                                           HorizontalTextAlignment="Center"
+                                           VerticalTextAlignment="Center"
+                                           HorizontalOptions="Center"
+                                           WidthRequest="140"
+                                           Margin="0,2,0,2"/>
+                                </StackLayout>
+                            </Grid>
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </VerticalStackLayout>
+</ContentView>
